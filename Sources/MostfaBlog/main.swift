@@ -15,7 +15,7 @@ struct MostfaBlog: Website {
     }
 
     // Update these properties to configure your website:
-    var url = URL(string: "https://your-website-url.com")!
+    var url = URL(string: "https://imostfa.github.io/Blog/")!
     var name = "Mostfa's Blog  |  كلامٌ مُصطفى"
     var description = "كلام فارغ، لكن لذيذ "
     var language: Language { .arabic }
