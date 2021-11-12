@@ -161,6 +161,10 @@ private extension Node where Context == HTML.BodyContext {
     static func wrapper(_ nodes: Node...) -> Node {
         .div(.class("wrapper"), .group(nodes))
     }
+    static func headerWrapper(_ nodes: Node...) -> Node {
+        .div(.class("headerWrapper"), .group(nodes))
+    }
+
 
     static func header<T: Website>(
         for context: PublishingContext<T>,
@@ -168,9 +172,14 @@ private extension Node where Context == HTML.BodyContext {
     ) -> Node {
         let sectionIDs = T.SectionID.allCases
 
+
         return .header(
-            .wrapper(
-                .a(.class("site-name"), .href("/"), .text(context.site.name)),
+            .headerWrapper(
+                //.img(.src(.init("https://media.caramel.la/Eq5Kk8P5W?e=0,0,754,455&f=webp&r=240")),.class("image-item-class")),
+                .if(selectedSection != nil,
+                        .a(.class("item-name"), .href("/"), .text(context.site.name),.img(.class("image-icon"),.src(.init("https://avatars.githubusercontent.com/u/2325884?v=4"))))
+                    ,else:
+                            .a(.class("site-name"), .href("/"), .text(context.site.name))),
                 .if(sectionIDs.count > 1,
                     .nav(
                         .ul(.forEach(sectionIDs) { section in

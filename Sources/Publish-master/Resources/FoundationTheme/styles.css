@@ -13,6 +13,7 @@ pre {
     text-align: left;
 }
 
+
 pre code {
     font-family: monospace;
     display: block;
@@ -91,8 +92,6 @@ body {
 }
 
 header {
-    background-color: #4E307D;
-    background: linear-gradient(to bottom right, #4E307D, #6345A6);
 
     /*header {
     position: relative;
@@ -109,14 +108,20 @@ header .wrapper {
     text-align: center;
 }
 
-header a {
-    text-decoration: none;
-}
+
+
 
 header .site-name {
+    background-color: #4E307D;
+    background: linear-gradient(to bottom right, #4E307D, #6345A6);
+    display: inline-block;
     font-size: 1.5em;
     color: #DDDDDD;
     font-weight: bold;
+    text-decoration: none;
+    width: 100%;
+    padding:20px;
+
 }
 
 nav {
@@ -248,7 +253,7 @@ footer {
         background-color: #5FABE3;
     }
 
-    header {
+    header .site-name
         background-color: #4E307D;
     }
 }
@@ -342,9 +347,7 @@ header .wrapper {
     padding: 25px 0 20px 0;
 }
 
-header a {
-    display: inline-block;
-}
+
 
 header p a {
     text-decoration: underline;
@@ -2227,3 +2230,19 @@ pre code {
 }
 
 
+
+
+
+.item-name {
+    display: flex;
+    align-content: flex-start;
+    align-items: center;
+    justify-content: flex-end;
+}
+
+img.image-icon {
+    margin: 10px;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+}

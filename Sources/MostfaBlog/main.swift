@@ -17,7 +17,7 @@ struct MostfaBlog: Website {
     // Update these properties to configure your website:
     var url = URL(string: "https://your-website-url.com")!
     var name = "Mostfa's Blog  |  كلامٌ مُصطفى"
-    var description = "هنا مصطفى و سويفت 🍎 و حاجات تانية خطيرة "
+    var description = "كلام فارغ، لكن لذيذ "
     var language: Language { .arabic }
     var imagePath: Path? { nil }
 }
