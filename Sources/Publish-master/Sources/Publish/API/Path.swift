@@ -30,7 +30,7 @@ public extension Path {
         guard string.first != "/" else { return string }
         guard !string.hasPrefix("http://") else { return string }
         guard !string.hasPrefix("https://") else { return string }
-        return "/" + string
+        return "/Blog/" + string
     }
 
     /// Append a component to this path, such as a folder or file name.

@@ -26,7 +26,7 @@ public extension Node where Context == HTML.DocumentContext {
         for location: Location,
         on site: T,
         titleSeparator: String = " | ",
-        stylesheetPaths: [Path] = ["/styles.css"],
+        stylesheetPaths: [Path] = ["/Blog/styles.css"],
         rssFeedPath: Path? = .defaultForRSSFeed,
         rssFeedTitle: String? = nil
     ) -> Node {

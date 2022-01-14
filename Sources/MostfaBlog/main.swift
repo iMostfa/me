@@ -11,11 +11,12 @@ struct MostfaBlog: Website {
     }
 
     struct ItemMetadata: WebsiteItemMetadata {
+
         // Add any site-specific metadata that you want to use here.
     }
 
     // Update these properties to configure your website:
-    var url = URL(string: "https://imostfa.github.io/Blog/")!
+    var url = URL(string: "https://imostfa.github.io/Blog")!
     var name = "Mostfa's Blog  |  كلامٌ مُصطفى"
     var description = "كلام فارغ، لكن لذيذ "
     var language: Language { .arabic }
@@ -23,5 +24,11 @@ struct MostfaBlog: Website {
 }
 
 // This will generate your website using the built-in Foundation theme:
-try MostfaBlog().publish(withTheme: .foundation,plugins: [.splash(withClassPrefix: "")])
-
+try MostfaBlog().publish(withTheme: .foundation
+                         ,deployedUsing: .git("https://github.com/iMostfa/Blog"),
+                         plugins: [.splash(withClassPrefix: "")])
+//try MostfaBlog().publish(using: [
+//    .with
+//    .deploy(using: .gitHub("imostfa/Blog"))
+//])
+//

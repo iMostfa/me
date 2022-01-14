@@ -177,9 +177,9 @@ private extension Node where Context == HTML.BodyContext {
             .headerWrapper(
                 //.img(.src(.init("https://media.caramel.la/Eq5Kk8P5W?e=0,0,754,455&f=webp&r=240")),.class("image-item-class")),
                 .if(selectedSection != nil,
-                        .a(.class("item-name"), .href("/"), .text(context.site.name),.img(.class("image-icon"),.src(.init("https://avatars.githubusercontent.com/u/2325884?v=4"))))
+                        .a(.class("item-name"), .href("/Blog"), .text(context.site.name),.img(.class("image-icon"),.src(.init("https://avatars.githubusercontent.com/u/2325884?v=4"))))
                     ,else:
-                            .a(.class("site-name"), .href("/"), .text(context.site.name))),
+                            .a(.class("site-name"), .href("/Blog"), .text(context.site.name))),
                 .if(sectionIDs.count > 1,
                     .nav(
                         .ul(.forEach(sectionIDs) { section in
@@ -267,6 +267,7 @@ enum TagType: String {
     case computerScience = "Computer Science"
     case Memory
     case Arabic
+    case LifeIsHard
 
 
     typealias hexColor = String
@@ -286,6 +287,9 @@ enum TagType: String {
           return #colorLiteral(red: 0.3294117647, green: 0.3294117647, blue: 0.6117647059, alpha: 1).hexString
         case .Memory:
            return #colorLiteral(red: 0.3048941195, green: 0.5726054311, blue: 0.8743758798, alpha: 1).hexString
+
+        case .LifeIsHard:
+            return #colorLiteral(red: 0.161354512, green: 0.159904331, blue: 0.2076623142, alpha: 1).hexString
 
         }
     }
