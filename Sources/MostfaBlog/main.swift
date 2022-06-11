@@ -24,8 +24,8 @@ struct MostfaBlog: Website {
 }
 
 // This will generate your website using the built-in Foundation theme:
-try MostfaBlog().publish(withTheme: .foundation
-                         ,deployedUsing: .git("https://github.com/iMostfa/Blog"),
+try MostfaBlog().publish(withTheme: .foundation,
+                       //  ,deployedUsing: .git("https://github.com/iMostfa/Blog"),
                          plugins: [.splash(withClassPrefix: "")])
 //try MostfaBlog().publish(using: [
 //    .with
