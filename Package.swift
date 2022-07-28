@@ -13,8 +13,7 @@ let package = Package(
     ],
     dependencies: [
       .package(name: "Publish", path: "/Users/mostfaessam/Downloads/Publish"),
-      .package(name: "SplashPublishPlugin", url: "https://github.com/johnsundell/splashpublishplugin", from: "0.2.0")
-
+      .package(name: "SplashPublishPlugin", path: "/Users/mostfaessam/SplashPublishPlugin")
     ],
     targets: [
         .target(
