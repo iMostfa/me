@@ -1,6 +1,7 @@
 import Foundation
 import Publish
 import Plot
+import ReadingTimePublishPlugin
 
 import SplashPublishPlugin
 // This type acts as the configuration for your website.
@@ -27,6 +28,8 @@ struct MostfaBlog: Website {
 try MostfaBlog().publish(withTheme: .foundation,
                          additionalSteps: [
                           .deploy(using: .git("https://github.com/iMostfa/Blog.git")),
+                          .copyFiles(at: "postThumps",to:"/postThumps"),
+                          .copyFiles(at: "postsImages",to: "/postsImages"),
                           .copyFiles(at: "fonts",
                                                      to: "/fonts")
 

@@ -6,6 +6,8 @@
 //
 
 import Plot
+import Ink
+import Publish
 import ReadingTimePublishPlugin
 
 public extension Theme {
@@ -14,7 +16,7 @@ public extension Theme {
   static var foundation2: Self {
     Theme(
       htmlFactory: Foundation2HTMLFactory(),
-      resourcePaths: ["Resources/FoundationTheme/styles.css"]
+      resourcePaths: ["styles.css"]
     )
   }
 }
@@ -82,6 +84,7 @@ private struct Foundation2HTMLFactory<Site: Website>: HTMLFactory {
             )
           )
         ),
+        .comments(for: item),
         .footer(for: context.site)
       )
     )
@@ -252,6 +255,32 @@ private extension Node where Context == HTML.BodyContext {
       }
       
     )
+  }
+  
+  static func comments<T: Website>(for item: Item<T>) -> Node {
+    let commentsSupport =
+    """
+<div id="disqus_thread"></div>
+<script>
+    /**
+    *  RECOMMENDED CONFIGURATION VARIABLES: EDIT AND UNCOMMENT THE SECTION BELOW TO INSERT DYNAMIC VALUES FROM YOUR PLATFORM OR CMS.
+    *  LEARN WHY DEFINING THESE VARIABLES IS IMPORTANT: https://disqus.com/admin/universalcode/#configuration-variables    */
+    
+    var disqus_config = function () {
+    this.page.url = http://imostfa.github.io/Blog/\(item.path);  // Replace PAGE_URL with your page's canonical URL variable
+    this.page.identifier = \(item.path); // Replace PAGE_IDENTIFIER with your page's unique identifier variable
+    };
+    
+    (function() { // DON'T EDIT BELOW THIS LINE
+    var d = document, s = d.createElement('script');
+    s.src = 'https://imostfa.disqus.com/embed.js';
+    s.setAttribute('data-timestamp', +new Date());
+    (d.head || d.body).appendChild(s);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+"""
+    return .element(named: "CommentsSupport", nodes: [.raw(commentsSupport)]).node
   }
   
   static func footer<T: Website>(for site: T) -> Node {

@@ -13,12 +13,13 @@ let package = Package(
     ],
     dependencies: [
       .package(name: "Publish", path: "/Users/mostfaessam/Downloads/Publish"),
-      .package(name: "SplashPublishPlugin", path: "/Users/mostfaessam/SplashPublishPlugin")
+      .package(name: "SplashPublishPlugin", path: "/Users/mostfaessam/SplashPublishPlugin"),
+      .package(name: "ReadingTimePublishPlugin", url: "https://github.com/leogdion/ReadingTimePublishPlugin",branch: "patch-2")
     ],
     targets: [
         .target(
             name: "MostfaBlog",
-            dependencies: ["Publish","SplashPublishPlugin"]
+            dependencies: ["Publish","SplashPublishPlugin","ReadingTimePublishPlugin"]
         )
     ]
 )

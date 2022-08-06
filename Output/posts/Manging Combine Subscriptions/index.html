@@ -1,0 +1,75 @@
+<!DOCTYPE html><html lang="ar"><head><meta charset="UTF-8"/><meta name="og:site_name" content="Mostfa's Blog  |  كلامٌ مُصطفى"/><link rel="canonical" href="https://imostfa.github.io/Blog/posts/Manging%20Combine%20Subscriptions"/><meta name="twitter:url" content="https://imostfa.github.io/Blog/posts/Manging%20Combine%20Subscriptions"/><meta name="og:url" content="https://imostfa.github.io/Blog/posts/Manging%20Combine%20Subscriptions"/><title>ازاي تهندل السبسكريبشن في كومباين | Mostfa's Blog  |  كلامٌ مُصطفى</title><meta name="twitter:title" content="ازاي تهندل السبسكريبشن في كومباين | Mostfa's Blog  |  كلامٌ مُصطفى"/><meta name="og:title" content="ازاي تهندل السبسكريبشن في كومباين | Mostfa's Blog  |  كلامٌ مُصطفى"/><meta name="description" content="ازاي تهندل السبسكريبشنز في كومباين مع الفيو كونترولرز او الفيوموديلز"/><meta name="twitter:description" content="ازاي تهندل السبسكريبشنز في كومباين مع الفيو كونترولرز او الفيوموديلز"/><meta name="og:description" content="ازاي تهندل السبسكريبشنز في كومباين مع الفيو كونترولرز او الفيوموديلز"/><meta name="twitter:card" content="summary_large_image"/><link rel="stylesheet" href="/Blog/styles.css" type="text/css"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/><link rel="shortcut icon" href="/Blog/images/favicon.png" type="image/png"/><link rel="alternate" href="/Blog/feed.rss" type="application/rss+xml" title="Subscribe to Mostfa's Blog  |  كلامٌ مُصطفى"/><meta name="twitter:image" content="https://imostfa.github.io/Blog/postThumps/Combine.png"/><meta name="og:image" content="https://imostfa.github.io/Blog/postThumps/Combine.png"/></head><body class="item-page"><header><div class="headerWrapper"><a class="item-name" href="/Blog">Mostfa's Blog  |  كلامٌ مُصطفى<img class="image-icon" src="https://avatars.githubusercontent.com/u/2325884?v=4"/></a></div></header><div class="wrapper"><article><div class="content"><h1>ازاي تهندل السبسكريبشن في كومباين</h1><ul class="tag-list" style="text-decoration-style: none;"><li style="background-color: #6a0dad;">الخميس, ٢٨, يوليو, ٢٠٢٢ ٠٧:٠٢ ص</li><li style="background-color: #54549C;"><a href="/Blog/tags/arabic">Arabic</a></li><li style="background-color: #8E5AF7;"><a href="/Blog/tags/interviews">Interviews</a></li></ul><p>لما تكون بتستخدم Combine في الفيوكنترولر/الفيوموديل، بيكون عليك مسؤلية هندلة و الحفاظ على السبسكريبشنز aka Disposals</p><p>لو افترضنا الكود الآتي كمثال على بابلشر بيأبديت الUI في الابلكيشن:</p><pre><code><span class="keyword">class</span> ViewController: <span class="type">UIViewController</span> { 
+
+<span class="keyword">var</span> disposeBag:<span class="type">Set</span>&lt;<span class="type">AnyCancellable</span>&gt; = []
+
+
+<span class="keyword">func</span> viewDidLoad(<span class="keyword">_</span> animated: <span class="type">Bool</span>) { 
+  <span class="keyword">super</span>.<span class="call">viewDidLoad</span>(animated)
+  
+  publisher.<span class="call">sink</span> { newValue <span class="keyword">in 
+    self</span>.<span class="call">updateUI</span>(with: newValue)
+    }
+  }<span class="highlight offset">.<span class="call">store</span>(in: &amp;disposeBag)  </span>
+}
+</code></pre><p>اللي بيحصل هنا انه لما بنعمل سبسكرايب بنحفظ السبسكريبشن (AnyCancellable) في الSet الخاصة بالDisposeBag</p><img src="../../postsImages/Combine-subscription/original.png" alt="Combine subscription"/><p>ليه بنعمل كدا ؟ علشان لو محفظتش الريفرينس بتاع الكانسيلبل في Array/normal variable/Set الARC هيشيل الفاريبل من الميموري وفي كومباين لازم علشان تستلم فاليوز، تكون حافظ السبسكريبشن</p><p>كأنك لازم تفضل ماسك السلك اللي بيربطك بالبابلشر اللي بيبعت الداتا</p><p>نفترض انه خلاص انا اخدت الداتا اللي انا عايزها و دلوقتي الكنترولر دا اليوزر هيخرج منه، ازاي اكنسل السبسكريبشن بتاعتي و معدتش استلم اي داتا ؟ هل دا بيحصل بشكل اوتوماتيك ؟ ولا لازم اهندله بنفسي ؟ ايه اللي هيحصل لو انا مشيلتش الكانسيلبل و فضلت سايبه محفوظ ؟</p><p>كطريقة من طرق التعامل مع السؤال دي انه نعمل الآتي</p><pre><code><span class="keyword">class</span> ViewController: <span class="type">UIViewController</span> { 
+
+  <span class="keyword">deinit</span> {
+    <span class="call">print</span>(<span class="string">"i'm leaving the memory"</span>)
+  }
+  
+<span class="keyword">var</span> disposeBag:<span class="type">Set</span>&lt;<span class="type">AnyCancellable</span>&gt; = []
+
+<span class="regHighlight offset"> <span class="keyword">func</span> viewDidDisappear(<span class="keyword">_</span> animated: <span class="type">Bool</span>) </span> { 
+ <span class="keyword">super</span>.<span class="call">viewDidDisappear</span>(animated)
+ <span class="highlight offset"> disposeBag.<span class="call">removeAll</span>()  </span>
+}
+
+<span class="keyword">func</span> viewDidLoad(<span class="keyword">_</span> animated: <span class="type">Bool</span>) { 
+  <span class="keyword">super</span>.<span class="call">viewDidLoad</span>(animated)
+  
+  publisher.<span class="call">sink</span> { newValue <span class="keyword">in 
+    self</span>.<span class="call">updateUI</span>(with: newValue)
+    }
+  }.<span class="call">store</span>(in: &amp;disposeBag) 
+}
+</code></pre><p>لما الفيوكنترولر يختفي من الشاشة(في اغلب الاحيان معاناه انه خلاص اليوزر مش شايفه، بس مش ديما) ممكن تفضي الDisposeBag كلها، و بكدا السبسكريبشنز اللي محفوظة جواها هتتشال و الكنترولر كله هيتشال من الميموري</p><p>و تقدر تتأكد من دا بأنك تشوف deinit بيتعملها كول، لما تقفل الكنترولر، ورغم انه دا حل للمشكلة،،لكن هو بيترك عليك مسؤولية انك تعمل call للسطر دا كل في ViewDisAppear وفي بعض الاحيان مش هتبقى عايز تكنسل السبسكريبشن لما الفيو تختفي،</p><p>كحل اخر، ممكن تخلي مسؤولية كنسلة السبسكريبشن على ARC</p><pre><code><span class="keyword">class</span> ViewController: <span class="type">UIViewController</span> { 
+
+  <span class="keyword">deinit</span> {
+    <span class="call">print</span>(<span class="string">"i'm leaving the memory"</span>)
+  }
+  
+<span class="keyword">var</span> disposeBag:<span class="type">Set</span>&lt;<span class="type">AnyCancellable</span>&gt; = []
+
+
+<span class="keyword">func</span> viewDidLoad(<span class="keyword">_</span> animated: <span class="type">Bool</span>) { 
+  <span class="keyword">super</span>.<span class="call">viewDidLoad</span>(animated)
+  
+  publisher.<span class="call">sink</span> { <span class="highlight offset"> [<span class="keyword">weak self</span>] </span> newValue <span class="keyword">in 
+    self</span>.<span class="call">updateUI</span>(with: newValue)
+    }
+  }.<span class="call">store</span>(in: &amp;disposeBag) 
+}
+</code></pre><p>هنا احنا في الواقع حلينا مشكلتين، لأنه الكلوجر بتاع Sink بيكابتشر self، ودا في حد ذاته ممكن يعمل Memory Leak لو مفضتش الDisposeBag لكن لما تخلي self weakly capturered دا هيخلي ARC يقدر يشيل الSet بتاعت DisposeBag</p><p>وبناء عليه، احسن حل لو انت جوا الفيوكونترولر/فيو موديل، انك متعملش سترونج كابتشر على سيلف، و عموما حاول متعملش سترونج كابتشر في الكلوجرز طول حياتك 😂</p><p>الكلام اللي في البلوج دي يمشي على اي ريآكتيف فريمورك زي RxSwift/ReactiveSwift وكدا..</p><p>والبوست دا هو استفاضة في اجابتي على نفس السؤال في ستاك اوفرفولو https://stackoverflow.com/a/62964220/5253913</p><CommentsSupport><div id="disqus_thread"></div>
+<script>
+    /**
+    *  RECOMMENDED CONFIGURATION VARIABLES: EDIT AND UNCOMMENT THE SECTION BELOW TO INSERT DYNAMIC VALUES FROM YOUR PLATFORM OR CMS.
+    *  LEARN WHY DEFINING THESE VARIABLES IS IMPORTANT: https://disqus.com/admin/universalcode/#configuration-variables    */
+    
+    var disqus_config = function () {
+    this.page.url = "http://imostfa.github.io/Blog/posts/Manging%20Combine%20Subscriptions";
+
+ // Replace PAGE_URL with your page's canonical URL variable
+  
+  this.page.identifier = "posts/Manging%20Combine%20Subscriptions";
+
+// Replace PAGE_IDENTIFIER with your page's unique identifier variable
+    };
+    
+    (function() { // DON'T EDIT BELOW THIS LINE
+    var d = document, s = d.createElement('script');
+    s.src = 'https://imostfa.disqus.com/embed.js';
+    s.setAttribute('data-timestamp', +new Date());
+    (d.head || d.body).appendChild(s);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript></CommentsSupport></div></article></div><footer><p>Made with 💞 Using <a href="https://github.com/johnsundell/publish">Swift</a></p><p><a href="/feed.rss">RSS feed</a></p></footer></body></html>
